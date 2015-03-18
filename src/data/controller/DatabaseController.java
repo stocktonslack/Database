@@ -193,6 +193,18 @@ public class DatabaseController
 
 		return results;
 	}
+	
+	public String [][] selectQueryResults(String query)
+	{
+		String [][] results;
+		
+		try
+		{
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answers = firstStatement.executeQuery(query);
+			int column
+		}
+	}
 
 	public String getConnectString()
 	{
