@@ -14,6 +14,7 @@ public class DatabaseController
 	private Connection databaseConnection;
 	private DatabaseController baseController;
 	private String query;
+	private long queryTime;
 
 	public DatabaseController(DatabaseController baseController)
 	{
@@ -22,6 +23,15 @@ public class DatabaseController
 		this.connectString = "jdbc:mysql://localhost";
 		setupConnection();
 	}
+
+	
+	
+	public DatabaseController(DatabaseAppController databaseAppController)
+	{
+		// TODO Auto-generated constructor stub
+	}
+
+
 
 	private void checkDriver()
 	{
@@ -74,7 +84,8 @@ public class DatabaseController
 	{
 		String[][] results;
 		String query = "SHOW TABLES";
-
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
 		try
 		{
 			Statement firstStatement = databaseConnection.createStatement();
@@ -93,13 +104,15 @@ public class DatabaseController
 
 			answers.close();
 			firstStatement.close();
+			endTime = System.currentTimeMillis();
 		}
 		catch (SQLException currentException)
 		{
+			endTime = System.currentTimeMillis();
 			results = new String[][] { { "empty" } };
 			displayErrors(currentException);
 		}
-
+		queryTime = endTime - startTime;
 		return results;
 
 	}
