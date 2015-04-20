@@ -28,7 +28,7 @@ public class DatabaseController
 	
 	public DatabaseController(DatabaseAppController databaseAppController)
 	{
-		// TODO Auto-generated constructor stub
+		
 	}
 
 

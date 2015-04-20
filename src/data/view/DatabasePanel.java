@@ -29,8 +29,7 @@ public class DatabasePanel extends JPanel
 		this.baseController = baseController;
 		baseLayout = new SpringLayout();
 		queryButton = new JButton("test query");
-		baseLayout.putConstraint(SpringLayout.NORTH, queryButton, 344, SpringLayout.NORTH, this);
-		baseLayout.putConstraint(SpringLayout.WEST, queryButton, 113, SpringLayout.WEST, this);
+		
 		displayPane = new JScrollPane();
 		
 		setupDisplayPane();
@@ -64,15 +63,18 @@ public class DatabasePanel extends JPanel
 		this.setLayout(baseLayout);
 		this.add(displayPane);
 		this.add(queryButton);
+
 		displayArea = new JTextArea(10,30);
-		baseLayout.putConstraint(SpringLayout.WEST, displayArea, 125, SpringLayout.WEST, this);
-		baseLayout.putConstraint(SpringLayout.SOUTH, displayArea, -62, SpringLayout.NORTH, queryButton);
+		displayArea.setLineWrap(true);
 		add(displayArea);
 	}
 	
 	private void setupLayout()
 	{
-		
+		baseLayout.putConstraint(SpringLayout.WEST, queryButton, 195, SpringLayout.WEST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, queryButton, -295, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.WEST, displayArea, 125, SpringLayout.WEST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, displayArea, -718, SpringLayout.SOUTH, this);
 	}
 	
 	private void setupListeners()
@@ -81,12 +83,16 @@ public class DatabasePanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				String[][] temp = baseController.getBaseController().getMetaDataTitles();
-				for(String [] current : temp)
-				{
-					displayArea.setText(displayArea.getText() + "Rows Affected:" + current + "\n");
-				}
+				JFrame popFrame = new JFrame();
+				popFrame.setSize(250, 250);
+				popFrame.setContentPane(new DynamicDataPanel(baseController, "books"));
+				popFrame.setVisible(true);
 			}
+		});
+		
+		samplePassword.addKeyListener(new KeyListener()
+		{
+			private boolean is Pasting 
 		});
 	}
 	
