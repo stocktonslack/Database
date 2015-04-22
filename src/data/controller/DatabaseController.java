@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
+import data.model.QueryInfo;
+
 public class DatabaseController
 {
 	private String connectString;
@@ -24,14 +26,10 @@ public class DatabaseController
 		setupConnection();
 	}
 
-	
-	
 	public DatabaseController(DatabaseAppController databaseAppController)
 	{
-		
+
 	}
-
-
 
 	private void checkDriver()
 	{
@@ -115,6 +113,38 @@ public class DatabaseController
 		queryTime = endTime - startTime;
 		return results;
 
+	}
+
+	public String[][] testResults()
+	{
+		String[][] results;
+		String query = "SHOW TABLES";
+		
+		try
+		{
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answers = firstStatement.executeQuery(query);
+			
+			answers.last();
+			int numberOfRows = answers.getRow();
+			answers.beforeFirst();
+		
+			results = new String [numberOfRows][1];
+			
+			while(answers.next())
+			{
+				results[answers.getRow() - 1][1] = answers.getString(1);
+			}
+			
+			answers.close();
+			firstStatement.close();
+		}
+		catch(SQLException currentException)
+		{
+			results = new String [][] {{"empty"}};
+			displayErrors(currentException);
+		}
+		return results;
 	}
 
 	public String displayTables()
@@ -206,7 +236,7 @@ public class DatabaseController
 
 		return results;
 	}
-	
+
 	public String [][] selectQueryResults(String query)
 	{
 		String [][] results;
@@ -215,8 +245,27 @@ public class DatabaseController
 		{
 			Statement firstStatement = databaseConnection.createStatement();
 			ResultSet answers = firstStatement.executeQuery(query);
-			int column
+			
 		}
+	}
+
+	public void submitUpdateQuery(String query)
+	{
+		this.query = query;
+		long startTime = System.currentTimeMillis();
+		long endTime = 0;
+		try
+		{
+			Statement updateStatement = databaseConnection.createStatement();
+			updateStatement.executeUpdate(query);
+			endTime = System.currentTimeMillis();
+		}
+		catch (SQLException currentError)
+		{
+			endTime = System.currentTimeMillis();
+			displayErrors(currentError);
+		}
+		baseController.getQueryList().add(new QueryInfo(query, endTime = startTime));
 	}
 
 	public String getConnectString()

@@ -2,36 +2,29 @@ package data.controller;
 
 import javax.swing.*;
 
-import data.model.Database;
-import data.view.DatabaseFrame;
-
 public class DatabaseAppController
 {
-	private DatabaseFrame appFrame;
-	private DatabaseController dataController;
-	private ArrayList<QueryInfo> queryList;
-	private JBUtton queryBUtton;
+	private DatabaseAppController baseController;
+	private JButton queryButton;
 	private SpringLayout baseLayout;
 	
-	public DynamicDataPanel(DatabaseAppController baseController, String table)
+	public DatabaseAppController(DatabaseAppController baseController, String table)
 	{
 		this.baseController = baseController;
 		queryButton = new JButton ("Submit query");
 		baseLayout = new SpringLayout();
 		setupPanel(table);
-//		dataController = new DatabaseController (this);
-//		queryList = new ArrayList<QueryInfo>();
-//		appFrame = new DataFrame(this);
 	}
 	
-	public DataFrame getAppFrame()
+	private void setupPanel(String selectedTable)
 	{
-		return appFrame;
+		this.setLayout(baseLayout);
+		this.add(queryButton);
 	}
 	
-	public DatabaseController()
+	private void setupLayout();
 	{
-		
+		baseLayout.putConstraint(SpringLayout.WEST, queryButton, 161, SpringLayout.WEST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, queryButton, -10, SpringLayout.SOUTH, this);
 	}
-	
 }
