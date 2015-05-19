@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,14 +12,15 @@ import javax.swing.*;
 
 public class DatabaseAppController
 {
-	private DatabaseAppController baseController;
+	private DatabaseController baseController;
 	private JButton queryButton;
 	private ArrayList<String> queryList;
 	private SpringLayout baseLayout;
+	private JFrame appFrame;
 
-	public DatabaseAppController(DatabaseAppController baseController, String table)
+	public DatabaseAppController()
 	{
-		this.baseController = baseController;
+		this.baseController = new DatabaseController(this);
 		queryButton = new JButton("Submit query");
 		baseLayout = new SpringLayout();
 		setupPanel(table);
@@ -26,12 +28,11 @@ public class DatabaseAppController
 
 	private void setupPanel(String selectedTable)
 	{
-		this.setLayout(baseLayout);
+		this.setupLayout(baseLayout);
 		this.add(queryButton);
 	}
 
-	private void setupLayout();
-
+	private void setupLayout()
 	{
 		baseLayout.putConstraint(SpringLayout.WEST, queryButton, 161, SpringLayout.WEST, this);
 		baseLayout.putConstraint(SpringLayout.SOUTH, queryButton, -10, SpringLayout.SOUTH, this);
@@ -49,7 +50,7 @@ public class DatabaseAppController
 				while (textScanner.hasNext())
 				{
 					String query = textScanner.nextLine();
-					long tempTime = Long.parseLong(readFileScanner.nextLine));
+					long tempTime = Long.parseLong(readFileScanner.nextLine);
 					
 					queryList.add(newQueryInfo(query, textScanner.nextLong()));
 				}
@@ -63,7 +64,7 @@ public class DatabaseAppController
 		}
 		catch (IOException currentError)
 		{
-			dataController.displayErrors(currentError);
+			baseController.displayErrors(currentError);
 		}
 	}
 
@@ -79,7 +80,7 @@ public class DatabaseAppController
 			if(!saveFile.exists())
 			{
 				saveFile.createNewFile();
-				JOptionPane.showMessageDialog((getAppFrame(), "File saved");
+				JOptionPane.showMessageDialog((getAppFrame()), "File saved");
 				
 			}
 			
@@ -91,7 +92,58 @@ public class DatabaseAppController
 		}
 		catch(IOException currentError)
 		{
-			dataController.displayErrors(currentError);
+			baseController.displayErrors(currentError);
 		}
+	}
+
+	public DatabaseAppController getBaseController()
+	{
+		return baseController;
+	}
+
+	public JButton getQueryButton()
+	{
+		return queryButton;
+	}
+
+	public ArrayList<String> getQueryList()
+	{
+		return queryList;
+	}
+
+	public SpringLayout getBaseLayout()
+	{
+		return baseLayout;
+	}
+
+	public JFrame getAppFrame()
+	{
+		return appFrame;
+	}
+
+	public void setBaseController(DatabaseAppController baseController)
+	{
+		this.baseController = baseController;
+	}
+
+	public void setQueryButton(JButton queryButton)
+	{
+		this.queryButton = queryButton;
+	}
+
+	public void setQueryList(ArrayList<String> queryList)
+	{
+		this.queryList = queryList;
+	}
+
+	public void setBaseLayout(SpringLayout baseLayout)
+	{
+		this.baseLayout = baseLayout;
+	}
+
+	public void setAppFrame(JFrame appFrame)
+	{
+		this.appFrame = appFrame;
+	}
 	}
 }

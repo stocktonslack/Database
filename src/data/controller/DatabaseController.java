@@ -115,7 +115,7 @@ public class DatabaseController
 
 	}
 
-	public String[][] testResults()
+	public String[][] testResult()
 	{
 		String[][] results;
 		String query = "SHOW TABLES";
@@ -193,7 +193,7 @@ public class DatabaseController
 		return rowsAffected;
 	}
 
-	private void displayErrors(Exception currentException)
+	public void displayErrors(Exception currentException)
 	{
 		JOptionPane.showMessageDialog(baseController.getAppFrame(), "SQL State" + ((SQLException) currentException).getSQLState());
 		JOptionPane.showMessageDialog(baseController.getAppFrame(), "SQL Error Code" + ((SQLException) currentException).getErrorCode());
@@ -237,17 +237,59 @@ public class DatabaseController
 		return results;
 	}
 
-	public String [][] selectQueryResults(String query)
+	private boolean checkQueryForDataViolation()
 	{
-		String [][] results;
+		if(query.toUpperCase().contains(" DROP ")
+				|| query.toUpperCase().contains(" TRUNCATE ")
+				|| query.toUpperCase().contains(" SET ")
+				|| query.toUpperCase().contains(" ALTER "))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 		
+	}		
+	
+	public String[][] selectQueryResults(String query)
+	{
+		String[][] results;
+		this.query = query;
 		try
 		{
+			if (checkQueryForDataViolation())
+			{
+				throw new SQLException("No Data Violation", "Don't mess with the data", Integer.MIN_VALUE);
+			}
+
 			Statement firstStatement = databaseConnection.createStatement();
 			ResultSet answers = firstStatement.executeQuery(query);
-			
+			int columnCount = answers.getMetaData().getColumnCount();
+
+			answers.last();
+			int numberOfRows = answers.getRow();
+			answers.beforeFirst();
+
+			results = new String[numberOfRows][columnCount];
+
+			while (answers.next())
+			{
+				for (int col = 0; col < columnCount; col++)
+				{
+					results[answers.getRow() - 1][col] = answers.getString(col + 1);
+				}
+			}
 		}
+		catch (SQLException currentException)
+		{
+			results = new String[][] { { "Query unseuccessful" }, { "Way to go" }, { currentException.getMessage() } };
+			displayErrors(currentException);
+		}
+		return results;
 	}
+
 
 	public void submitUpdateQuery(String query)
 	{
@@ -265,7 +307,7 @@ public class DatabaseController
 			endTime = System.currentTimeMillis();
 			displayErrors(currentError);
 		}
-		baseController.getQueryList().add(new QueryInfo(query, endTime = startTime));
+		baseController.getQuery().add(new QueryInfo(query, endTime = startTime));
 	}
 
 	public String getConnectString()
