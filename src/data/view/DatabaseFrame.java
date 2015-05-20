@@ -7,10 +7,22 @@ import javax.swing.JFrame;
 
 import data.controller.DatabaseController;
 
+/**
+ * The Frame for the GUI to hold the panel
+ * @author ssla9721
+ *
+ */
 public class DatabaseFrame extends JFrame
 {
+	/**
+	 * Declare and create the panel to be held by the frame.
+	 */
 	private DatabasePanel basePanel;
 	
+	/**
+	 * Constructor for the Frame of the Database Frame
+	 * @param baseController
+	 */
 	public DatabaseFrame(DatabaseController baseController)
 	{
 		basePanel = new DatabasePanel(baseController);
@@ -18,6 +30,9 @@ public class DatabaseFrame extends JFrame
 		setupListeners();
 	}
 	
+	/**
+	 * Setup the visual display of the Frame.
+	 */
 	private void setupFrame()
 	{
 		this.setContentPane(basePanel);
@@ -26,11 +41,18 @@ public class DatabaseFrame extends JFrame
 		this.setVisible(true);
 	}
 	
+	/**
+	 * Setup the listeners to respond to clicks and other such events.
+	 */
 	private void setupListeners()
 	{
 		addWindowListener(new WindowListener()
 		{
 
+			/**
+			 * A a necessary blank method in order to have the windowListener so that it will save the
+			 * timing information for the baseController when it closes.
+			 */
 			@Override
 			public void windowActivated(WindowEvent arg0)
 			{
@@ -38,13 +60,20 @@ public class DatabaseFrame extends JFrame
 				
 			}
 
+			/**
+			 * A a necessary blank method in order to have the windowListener so that it will save the
+			 * timing information for the baseController when it closes.
+			 */
 			@Override
 			public void windowClosed(WindowEvent e)
 			{
 				// TODO Auto-generated method stub
 				
 			}
-
+			
+			/**
+			 * This saves the timing information when the window is closed.
+			 */
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
@@ -52,6 +81,10 @@ public class DatabaseFrame extends JFrame
 				
 			}
 
+			/**
+			 * A a necessary blank method in order to have the windowListener so that it will save the
+			 * timing information for the baseController when it closes.
+			 */
 			@Override
 			public void windowDeactivated(WindowEvent e)
 			{
@@ -59,6 +92,10 @@ public class DatabaseFrame extends JFrame
 				
 			}
 
+			/**
+			 * A a necessary method in order to have the windowListener so that it will save the
+			 * timing information for the baseController when it closes.
+			 */
 			@Override
 			public void windowDeiconified(WindowEvent e)
 			{
@@ -66,6 +103,10 @@ public class DatabaseFrame extends JFrame
 				
 			}
 
+			/**
+			 * A a necessary method in order to have the windowListener so that it will save the
+			 * timing information for the baseController when it closes.
+			 */
 			@Override
 			public void windowIconified(WindowEvent e)
 			{
@@ -73,6 +114,10 @@ public class DatabaseFrame extends JFrame
 				
 			}
 
+			/**
+			 * A a necessary method in order to have the windowListener so that it will save the
+			 * timing information for the baseController when it closes.
+			 */
 			@Override
 			public void windowOpened(WindowEvent e)
 			{

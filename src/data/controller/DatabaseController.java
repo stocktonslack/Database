@@ -1,5 +1,8 @@
 package data.controller;
 
+/**
+ * The necessary imports for the databaseController.
+ */
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,6 +13,12 @@ import javax.swing.JOptionPane;
 
 import data.model.QueryInfo;
 
+/**
+ * The setup for the database Controller so that the program can connect to and
+ * communicate with the database.
+ * @author ssla9721
+ *
+ */
 public class DatabaseController
 {
 	private String connectString;
@@ -18,6 +27,11 @@ public class DatabaseController
 	private String query;
 	private long queryTime;
 
+	/**
+	 * The constructor for the DatabaseController, initializing objects so that the proper methods
+	 * can be called and the proper address is available to connect to the database. 
+	 * @param baseController
+	 */
 	public DatabaseController(DatabaseController baseController)
 	{
 		this.baseController = baseController;
@@ -26,11 +40,10 @@ public class DatabaseController
 		setupConnection();
 	}
 
-	public DatabaseController(DatabaseAppController databaseAppController)
-	{
-
-	}
-
+	/**
+	 * The method to try and connect to the database driver, and will return an error if 
+	 * it doesn't work.
+	 */
 	private void checkDriver()
 	{
 		try
@@ -44,6 +57,9 @@ public class DatabaseController
 		}
 	}
 
+	/**
+	 * To try and close the connection to the database. If it fails it will return an error.
+	 */
 	public void closeConnection()
 	{
 		try
@@ -56,6 +72,10 @@ public class DatabaseController
 		}
 	}
 
+	/**
+	 * This method will attempt to setup the connection to the database, and if it fails will
+	 * return an error.
+	 */
 	private void setupConnection()
 	{
 		try
@@ -115,6 +135,10 @@ public class DatabaseController
 
 	}
 
+	/**
+	 * Checks the database for tables and checks to see what is in them.
+	 * @return Returns the results of what is inside of the tables.
+	 */
 	public String[][] testResult()
 	{
 		String[][] results;
@@ -147,6 +171,10 @@ public class DatabaseController
 		return results;
 	}
 
+	/**
+	 * The display of the tables, showing the tables and returning the results of the query.
+	 * @return returning the results of the query. 
+	 */
 	public String displayTables()
 	{
 		@SuppressWarnings("unused")
@@ -174,6 +202,10 @@ public class DatabaseController
 		return connectString;
 	}
 
+	/**
+	 *  Inserts the query of yoyo into the database.
+	 * @return returns the result of the yoyo statement and if it fails returns an error.
+	 */
 	public int insertSample()
 	{
 		int rowsAffected = -1;
@@ -193,15 +225,18 @@ public class DatabaseController
 		return rowsAffected;
 	}
 
+	/**
+	 * If there is an error it will display it as a JOptionPane.
+	 * @param currentException
+	 */
 	public void displayErrors(Exception currentException)
 	{
 		JOptionPane.showMessageDialog(baseController.getAppFrame(), "SQL State" + ((SQLException) currentException).getSQLState());
 		JOptionPane.showMessageDialog(baseController.getAppFrame(), "SQL Error Code" + ((SQLException) currentException).getErrorCode());
-
 	}
 
 	/**
-	 * 
+	 * Tests the results of the tables to see if the information 
 	 * @return
 	 */
 	public Object[][] testResults()
@@ -237,6 +272,11 @@ public class DatabaseController
 		return results;
 	}
 
+	/**
+	 * Checks to make sure that the language sent to the database is all in uppercase, and will 
+	 * return true or false.
+	 * @return
+	 */
 	private boolean checkQueryForDataViolation()
 	{
 		if(query.toUpperCase().contains(" DROP ")
@@ -253,6 +293,11 @@ public class DatabaseController
 		
 	}		
 	
+	/**
+	 * Uses a 2D String array to put the query into the string and checks if there is an error. 
+	 * @param query
+	 * @return
+	 */
 	public String[][] selectQueryResults(String query)
 	{
 		String[][] results;
@@ -290,7 +335,10 @@ public class DatabaseController
 		return results;
 	}
 
-
+/**
+ * uses the system time to keep track of the query and how long it takes to execute.
+ * @param query
+ */
 	public void submitUpdateQuery(String query)
 	{
 		this.query = query;
@@ -310,41 +358,73 @@ public class DatabaseController
 		baseController.getQuery().add(new QueryInfo(query, endTime = startTime));
 	}
 
+	/**
+	 * the getter for the connect String.
+	 * @return returns the connect String
+	 */
 	public String getConnectString()
 	{
 		return connectString;
 	}
 
+	/**
+	 * The getter for the databaseConnection.
+	 * @return returns the databaseConnection.
+	 */
 	public Connection getDatabaseConnection()
 	{
 		return databaseConnection;
 	}
 
+	/**
+	 * The getter for the baseController which is the databaseController class.
+	 * @return
+	 */
 	public DatabaseController getBaseController()
 	{
 		return baseController;
 	}
 
+	/**
+	 * The getter for the query, that returns the string of the query. 
+	 * @return the string query. 
+	 */
 	public String getQuery()
 	{
 		return query;
 	}
 
+	/**
+	 * The setter for the connect String to set the string to somethign else. 
+	 * @param connectString
+	 */
 	public void setConnectString(String connectString)
 	{
 		this.connectString = connectString;
 	}
 
+	/**
+	 * the setter for the databaseConnection to change the 
+	 * @param databaseConnection
+	 */
 	public void setDatabaseConnection(Connection databaseConnection)
 	{
 		this.databaseConnection = databaseConnection;
 	}
 
+	/**
+	 * The setter for the baseController 
+	 * @param baseController
+	 */
 	public void setBaseController(DatabaseController baseController)
 	{
 		this.baseController = baseController;
 	}
 
+	/**
+	 * The setQuery method to change the string of the query. 
+	 * @param query
+	 */
 	public void setQuery(String query)
 	{
 		this.query = query;
