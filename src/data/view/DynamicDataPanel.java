@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import data.controller.DatabaseAppController;
+import data.controller.DatabaseController;
 
 /**
  * The Dynamic Data Panel, which can use different inputs to manipulate the
@@ -20,7 +21,7 @@ import data.controller.DatabaseAppController;
  */
 public class DynamicDataPanel extends JPanel
 {
-	private DatabaseAppController baseController;
+	private DatabaseController baseController;
 	private JButton queryButton;
 	private SpringLayout baseLayout;
 	private String table;
@@ -33,7 +34,7 @@ public class DynamicDataPanel extends JPanel
 	 * @param baseController
 	 * @param table
 	 */
-	public DynamicDataPanel(DatabaseAppController baseController, String table)
+	public DynamicDataPanel(DatabaseController baseController, String table)
 	{
 		this.baseController = baseController;
 		this.table = table;
@@ -59,8 +60,10 @@ public class DynamicDataPanel extends JPanel
 
 		String[] columns = baseController.getBaseController().getDatabaseColumnNames(selectedTable);
 
-		for (int spot = 0; spot < columns.length; spot++) {
-			if (!columns[spot].equalsIgnoreCase("id")) {
+		for (int spot = 0; spot < columns.length; spot++)
+		{
+			if (!columns[spot].equalsIgnoreCase("id"))
+			{
 				JLabel columnLabel = new JLabel(columns[spot]);
 				JTextField columnField = new JTextField(20);
 
@@ -97,12 +100,15 @@ public class DynamicDataPanel extends JPanel
 	{
 		String fields = "(";
 
-		for (int spot = 0; spot < fieldList.size(); spot++) {
+		for (int spot = 0; spot < fieldList.size(); spot++)
+		{
 			fields += "`" + fieldList.get(spot).getName() + "`";
-			if (spot == fieldList.size() - 1) {
+			if (spot == fieldList.size() - 1)
+			{
 				fields += ")";
 			}
-			else {
+			else
+			{
 				fields += ", ";
 			}
 		}
@@ -119,12 +125,15 @@ public class DynamicDataPanel extends JPanel
 	{
 		String values = "(";
 
-		for (int spot = 0; spot < fieldList.size(); spot++) {
+		for (int spot = 0; spot < fieldList.size(); spot++)
+		{
 			values += "'" + fieldList.get(spot).getText() + "'";
-			if (spot == fieldList.size() - 1) {
+			if (spot == fieldList.size() - 1)
+			{
 				values += ");";
 			}
-			else {
+			else
+			{
 				values += ", ";
 			}
 		}
@@ -138,7 +147,7 @@ public class DynamicDataPanel extends JPanel
 	 */
 	private void setupListeners()
 	{
-		String query = "INSERT INTO " + "`" + table + "`" + getFields() + " Values " + getValues();
+		final String query = "INSERT INTO " + "`" + table + "`" + getFields() + " Values " + getValues();
 
 		queryButton.addActionListener(new ActionListener()
 		{

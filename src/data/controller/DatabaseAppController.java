@@ -13,73 +13,76 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
+import data.model.QueryInfo;
+
 /**
  * The databaseAppController class, to
  * 
  * @author ssla9721
  *
  */
-public class DatabaseAppController {
+public class DatabaseAppController
+{
 	private DatabaseController baseController;
 	private JButton queryButton;
-	private ArrayList<String> queryList;
+	private ArrayList<QueryInfo> queryList;
 	private SpringLayout baseLayout;
 	private JFrame appFrame;
 
-	public DatabaseAppController() {
+	public DatabaseAppController()
+	{
 		this.baseController = new DatabaseController(this);
 		queryButton = new JButton("Submit query");
-		baseLayout = new SpringLayout();
-		setupPanel(table);
+		queryList = new ArrayList<QueryInfo>();
+		// setupPanel(table);
 	}
 
-	private void setupPanel(String selectedTable) {
-		this.setupLayout(baseLayout);
-		this.add(queryButton);
-	}
+	// private void setupPanel(String selectedTable) {
+	// this.setupLayout(baseLayout);
+	// this.add(queryButton);
+	// }
 
-	private void setupLayout() {
-		baseLayout.putConstraint(SpringLayout.WEST, queryButton, 161,
-				SpringLayout.WEST, this);
-		baseLayout.putConstraint(SpringLayout.SOUTH, queryButton, -10,
-				SpringLayout.SOUTH, this);
-	}
-
-	private void loadTimingInformation() {
-		try {
+	private void loadTimingInformation()
+	{
+		try
+		{
 			File loadFile = new File("asaasda.save");
-			if (loadFile.exists()) {
+			if (loadFile.exists())
+			{
 				queryList.clear();
 				Scanner textScanner = new Scanner(loadFile);
-				while (textScanner.hasNext()) {
+				while (textScanner.hasNext())
+				{
 					String query = textScanner.nextLine();
-					long tempTime = Long.parseLong(readFileScanner.nextLine);
+					long tempTime = Long.parseLong(textScanner.nextLine());
 
-					queryList.add(newQueryInfo(query, textScanner.nextLong()));
+					queryList.add(new QueryInfo(query, textScanner.nextLong()));
 				}
 				textScanner.close();
-				JOptionPane
-						.showMessageDialog(
-								getAppFrame(),
-								queryList.size()
-										+ " QueryInfo objects were loaded into the application");
-			} else {
-				JOptionPane.showMessageDialog(getAppFrame(),
-						"File not present. No QuerInfo objects loaded");
+				JOptionPane.showMessageDialog(getAppFrame(), queryList.size() + " QueryInfo objects were loaded into the application");
 			}
-		} catch (IOException currentError) {
+			else
+			{
+				JOptionPane.showMessageDialog(getAppFrame(), "File not present. No QuerInfo objects loaded");
+			}
+		}
+		catch (IOException currentError)
+		{
 			baseController.displayErrors(currentError);
 		}
 	}
 
-	public void saveTimingInformation() {
+	public void saveTimingInformation()
+	{
 		int saveNum = 0;
 		String fileName = "save" + saveNum;
 		String content = "";
-		try {
+		try
+		{
 			File saveFile = new File(fileName + ".txt");
 			saveNum++;
-			if (!saveFile.exists()) {
+			if (!saveFile.exists())
+			{
 				saveFile.createNewFile();
 				JOptionPane.showMessageDialog((getAppFrame()), "File saved");
 
@@ -90,48 +93,26 @@ public class DatabaseAppController {
 			bw.write(content);
 			bw.close();
 
-		} catch (IOException currentError) {
+		}
+		catch (IOException currentError)
+		{
 			baseController.displayErrors(currentError);
 		}
 	}
 
-	public DatabaseAppController getBaseController() {
+	public DatabaseController getBaseController()
+	{
 		return baseController;
 	}
 
-	public JButton getQueryButton() {
-		return queryButton;
-	}
-
-	public ArrayList<String> getQueryList() {
+	public ArrayList<QueryInfo> getQueryList()
+	{
 		return queryList;
 	}
 
-	public SpringLayout getBaseLayout() {
-		return baseLayout;
-	}
-
-	public JFrame getAppFrame() {
+	public JFrame getAppFrame()
+	{
 		return appFrame;
 	}
 
-	public void setBaseController(DatabaseAppController baseController) {
-		this.baseController = baseController;
-	}
-
-	public void setQueryButton(JButton queryButton) {
-		this.queryButton = queryButton;
-	}
-
-	public void setQueryList(ArrayList<String> queryList) {
-		this.queryList = queryList;
-	}
-
-	public void setBaseLayout(SpringLayout baseLayout) {
-		this.baseLayout = baseLayout;
-	}
-
-	public void setAppFrame(JFrame appFrame) {
-		this.appFrame = appFrame;
-	}
 }

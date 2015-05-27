@@ -16,6 +16,7 @@ import data.model.QueryInfo;
 /**
  * The setup for the database Controller so that the program can connect to and
  * communicate with the database.
+ * 
  * @author ssla9721
  *
  */
@@ -23,26 +24,28 @@ public class DatabaseController
 {
 	private String connectString;
 	private Connection databaseConnection;
-	private DatabaseController baseController;
+	private DatabaseAppController baseController;
 	private String query;
 	private long queryTime;
 
 	/**
-	 * The constructor for the DatabaseController, initializing objects so that the proper methods
-	 * can be called and the proper address is available to connect to the database. 
-	 * @param baseController
+	 * The constructor for the DatabaseController, initializing objects so that
+	 * the proper methods can be called and the proper address is available to
+	 * connect to the database.
+	 * 
+	 * @param databaseAppController
 	 */
-	public DatabaseController(DatabaseController baseController)
+	public DatabaseController(DatabaseAppController databaseAppController)
 	{
-		this.baseController = baseController;
+		this.baseController = databaseAppController;
 		checkDriver();
 		this.connectString = "jdbc:mysql://localhost";
 		setupConnection();
 	}
 
 	/**
-	 * The method to try and connect to the database driver, and will return an error if 
-	 * it doesn't work.
+	 * The method to try and connect to the database driver, and will return an
+	 * error if it doesn't work.
 	 */
 	private void checkDriver()
 	{
@@ -58,7 +61,8 @@ public class DatabaseController
 	}
 
 	/**
-	 * To try and close the connection to the database. If it fails it will return an error.
+	 * To try and close the connection to the database. If it fails it will
+	 * return an error.
 	 */
 	public void closeConnection()
 	{
@@ -73,8 +77,8 @@ public class DatabaseController
 	}
 
 	/**
-	 * This method will attempt to setup the connection to the database, and if it fails will
-	 * return an error.
+	 * This method will attempt to setup the connection to the database, and if
+	 * it fails will return an error.
 	 */
 	private void setupConnection()
 	{
@@ -137,43 +141,46 @@ public class DatabaseController
 
 	/**
 	 * Checks the database for tables and checks to see what is in them.
+	 * 
 	 * @return Returns the results of what is inside of the tables.
 	 */
 	public String[][] testResult()
 	{
 		String[][] results;
 		String query = "SHOW TABLES";
-		
+
 		try
 		{
 			Statement firstStatement = databaseConnection.createStatement();
 			ResultSet answers = firstStatement.executeQuery(query);
-			
+
 			answers.last();
 			int numberOfRows = answers.getRow();
 			answers.beforeFirst();
-		
-			results = new String [numberOfRows][1];
-			
-			while(answers.next())
+
+			results = new String[numberOfRows][1];
+
+			while (answers.next())
 			{
 				results[answers.getRow() - 1][1] = answers.getString(1);
 			}
-			
+
 			answers.close();
 			firstStatement.close();
 		}
-		catch(SQLException currentException)
+		catch (SQLException currentException)
 		{
-			results = new String [][] {{"empty"}};
+			results = new String[][] { { "empty" } };
 			displayErrors(currentException);
 		}
 		return results;
 	}
 
 	/**
-	 * The display of the tables, showing the tables and returning the results of the query.
-	 * @return returning the results of the query. 
+	 * The display of the tables, showing the tables and returning the results
+	 * of the query.
+	 * 
+	 * @return returning the results of the query.
 	 */
 	public String displayTables()
 	{
@@ -203,8 +210,10 @@ public class DatabaseController
 	}
 
 	/**
-	 *  Inserts the query of yoyo into the database.
-	 * @return returns the result of the yoyo statement and if it fails returns an error.
+	 * Inserts the query of yoyo into the database.
+	 * 
+	 * @return returns the result of the yoyo statement and if it fails returns
+	 *         an error.
 	 */
 	public int insertSample()
 	{
@@ -227,6 +236,7 @@ public class DatabaseController
 
 	/**
 	 * If there is an error it will display it as a JOptionPane.
+	 * 
 	 * @param currentException
 	 */
 	public void displayErrors(Exception currentException)
@@ -236,7 +246,8 @@ public class DatabaseController
 	}
 
 	/**
-	 * Tests the results of the tables to see if the information 
+	 * Tests the results of the tables to see if the information
+	 * 
 	 * @return
 	 */
 	public Object[][] testResults()
@@ -273,16 +284,14 @@ public class DatabaseController
 	}
 
 	/**
-	 * Checks to make sure that the language sent to the database is all in uppercase, and will 
-	 * return true or false.
+	 * Checks to make sure that the language sent to the database is all in
+	 * uppercase, and will return true or false.
+	 * 
 	 * @return
 	 */
 	private boolean checkQueryForDataViolation()
 	{
-		if(query.toUpperCase().contains(" DROP ")
-				|| query.toUpperCase().contains(" TRUNCATE ")
-				|| query.toUpperCase().contains(" SET ")
-				|| query.toUpperCase().contains(" ALTER "))
+		if (query.toUpperCase().contains(" DROP ") || query.toUpperCase().contains(" TRUNCATE ") || query.toUpperCase().contains(" SET ") || query.toUpperCase().contains(" ALTER "))
 		{
 			return true;
 		}
@@ -290,11 +299,13 @@ public class DatabaseController
 		{
 			return false;
 		}
-		
-	}		
-	
+
+	}
+
 	/**
-	 * Uses a 2D String array to put the query into the string and checks if there is an error. 
+	 * Uses a 2D String array to put the query into the string and checks if
+	 * there is an error.
+	 * 
 	 * @param query
 	 * @return
 	 */
@@ -335,10 +346,12 @@ public class DatabaseController
 		return results;
 	}
 
-/**
- * uses the system time to keep track of the query and how long it takes to execute.
- * @param query
- */
+	/**
+	 * uses the system time to keep track of the query and how long it takes to
+	 * execute.
+	 * 
+	 * @param query
+	 */
 	public void submitUpdateQuery(String query)
 	{
 		this.query = query;
@@ -355,11 +368,18 @@ public class DatabaseController
 			endTime = System.currentTimeMillis();
 			displayErrors(currentError);
 		}
-		baseController.getQuery().add(new QueryInfo(query, endTime = startTime));
+		baseController.getQueryList().add(new QueryInfo(query, endTime = startTime));
+	}
+
+	public String[] getDatabaseColumnNames(String selectedTable)
+	{
+		return ;
+
 	}
 
 	/**
 	 * the getter for the connect String.
+	 * 
 	 * @return returns the connect String
 	 */
 	public String getConnectString()
@@ -369,6 +389,7 @@ public class DatabaseController
 
 	/**
 	 * The getter for the databaseConnection.
+	 * 
 	 * @return returns the databaseConnection.
 	 */
 	public Connection getDatabaseConnection()
@@ -378,16 +399,18 @@ public class DatabaseController
 
 	/**
 	 * The getter for the baseController which is the databaseController class.
+	 * 
 	 * @return
 	 */
-	public DatabaseController getBaseController()
+	public DatabaseAppController getBaseController()
 	{
 		return baseController;
 	}
 
 	/**
-	 * The getter for the query, that returns the string of the query. 
-	 * @return the string query. 
+	 * The getter for the query, that returns the string of the query.
+	 * 
+	 * @return the string query.
 	 */
 	public String getQuery()
 	{
@@ -395,7 +418,8 @@ public class DatabaseController
 	}
 
 	/**
-	 * The setter for the connect String to set the string to somethign else. 
+	 * The setter for the connect String to set the string to something else.
+	 * 
 	 * @param connectString
 	 */
 	public void setConnectString(String connectString)
@@ -404,7 +428,8 @@ public class DatabaseController
 	}
 
 	/**
-	 * the setter for the databaseConnection to change the 
+	 * the setter for the databaseConnection to change the
+	 * 
 	 * @param databaseConnection
 	 */
 	public void setDatabaseConnection(Connection databaseConnection)
@@ -413,21 +438,28 @@ public class DatabaseController
 	}
 
 	/**
-	 * The setter for the baseController 
+	 * The setter for the baseController
+	 * 
 	 * @param baseController
 	 */
-	public void setBaseController(DatabaseController baseController)
+	public void setBaseController(DatabaseAppController baseController)
 	{
 		this.baseController = baseController;
 	}
 
 	/**
-	 * The setQuery method to change the string of the query. 
+	 * The setQuery method to change the string of the query.
+	 * 
 	 * @param query
 	 */
 	public void setQuery(String query)
 	{
 		this.query = query;
+	}
+
+	public Object[][] getMyYoyos()
+	{
+		return null;
 	}
 
 }
