@@ -58,7 +58,7 @@ public class DynamicDataPanel extends JPanel
 		this.add(queryButton);
 		int spacing = 50;
 
-		String[] columns = baseController.getBaseController().getDatabaseColumnNames(selectedTable);
+		String[] columns = baseController.getDatabaseColumnNames(selectedTable);
 
 		for (int spot = 0; spot < columns.length; spot++)
 		{
@@ -153,7 +153,7 @@ public class DynamicDataPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				baseController.getBaseController().submitUpdateQuery(query);
+				baseController.submitUpdateQuery(query);
 			}
 		});
 	}

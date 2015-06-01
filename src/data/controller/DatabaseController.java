@@ -6,6 +6,7 @@ package data.controller;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -102,6 +103,49 @@ public class DatabaseController
 	 * @return Returns the results, either the error that you have, or the new
 	 *         information in the database array and tables.
 	 */
+	public String[] getDatabaseColumnNames(String tableName)
+	{
+		String[] results;
+		String query = "SELECT * FROM " + tableName;
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
+		try
+		{
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answers = firstStatement.executeQuery(query); 
+			ResultSetMetaData myData = answers.getMetaData();
+			
+			results = new String[myData.getColumnCount()];
+			for(int count = 1; count <= myData.getColumnCount(); count++)
+			{
+				results [count-1] = myData.getColumnName(count);
+			}
+			
+			answers.close();
+			firstStatement.close();
+			endTime = System.currentTimeMillis();
+		}
+		catch (SQLException currentException)
+		{
+			endTime = System.currentTimeMillis();
+			results = new String[] {  "empty"  };
+			displayErrors(currentException);
+		}
+		queryTime = endTime - startTime;
+		return results;
+
+	}
+
+	/**
+	 * The database is accessed and then the Query "SHOW TABLES" is run, this
+	 * gives you the names of the tables. Then you get the number of rows in the
+	 * tables and then create a new string array. The information is put into
+	 * the new array. If there is an error or it does not work, then it will
+	 * display the error.
+	 * 
+	 * @return Returns the results, either the error that you have, or the new
+	 *         information in the database array and tables.
+	 */
 	public String[][] getMetaDataTitles()
 	{
 		String[][] results;
@@ -112,18 +156,18 @@ public class DatabaseController
 		{
 			Statement firstStatement = databaseConnection.createStatement();
 			ResultSet answers = firstStatement.executeQuery(query);
-
+	
 			answers.last();
 			int numberOfRows = answers.getRow();
 			answers.beforeFirst();
-
+	
 			results = new String[numberOfRows][1];
-
+	
 			while (answers.next())
 			{
 				results[answers.getRow() - 1][1] = answers.getString(1);
 			}
-
+	
 			answers.close();
 			firstStatement.close();
 			endTime = System.currentTimeMillis();
@@ -136,7 +180,7 @@ public class DatabaseController
 		}
 		queryTime = endTime - startTime;
 		return results;
-
+	
 	}
 
 	/**
@@ -371,11 +415,7 @@ public class DatabaseController
 		baseController.getQueryList().add(new QueryInfo(query, endTime = startTime));
 	}
 
-	public String[] getDatabaseColumnNames(String selectedTable)
-	{
-		return ;
 
-	}
 
 	/**
 	 * the getter for the connect String.

@@ -99,6 +99,8 @@ public class DatabaseAppController
 			baseController.displayErrors(currentError);
 		}
 	}
+	
+	
 
 	public DatabaseController getBaseController()
 	{

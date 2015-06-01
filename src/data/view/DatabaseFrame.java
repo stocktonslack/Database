@@ -5,6 +5,7 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
+import data.controller.DatabaseAppController;
 import data.controller.DatabaseController;
 
 /**
@@ -18,7 +19,7 @@ public class DatabaseFrame extends JFrame
 	 * Declare and create the panel to be held by the frame.
 	 */
 	private DatabasePanel basePanel;
-	
+	private DatabaseAppController baseController;
 	/**
 	 * Constructor for the Frame of the Database Frame
 	 * @param baseController
@@ -26,6 +27,7 @@ public class DatabaseFrame extends JFrame
 	public DatabaseFrame(DatabaseController baseController)
 	{
 		basePanel = new DatabasePanel(baseController);
+
 		setupFrame();
 		setupListeners();
 	}
